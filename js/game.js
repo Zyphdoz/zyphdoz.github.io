@@ -461,7 +461,10 @@ Game.prototype.gameOverTest = function () {
 Game.prototype.applyGravity = function () {
 	if (this.accumulator > this.gravity) {
 		this.accumulator -= this.gravity;
-		if (!controller.drop.isPressed && !controller.autoDrop) {
+		if (controller.drop.isPressed) {
+			//do nothing
+		}
+		else if (!controller.drop.isPressed && !controller.autoDrop) {
 			if (!this.moveDown()) {
 				this.shouldLockPiece = true;
 			}
