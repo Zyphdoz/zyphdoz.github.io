@@ -31,10 +31,10 @@ var Renderer = function (game, rendererFlag) {
 	this.x = 0;
 	this.y = 0;
 	this.color = 0;
-	this.border = [1,2,3,4,5,6,7,8,9,10,358,359,360,361,362,363,364,365,366,367,284,
-	285,286,287,199,200,201,202,357,340,323,306,289,272,255,238,221,204,187,170,153,
-	136,119,102,85,68,51,34,17,0,368,351,334,317,300,283,266,249,232,215,198,181,164,
-	147,130,113,96,79,62,45,28,11,288,271,254,237,220,203];
+	this.border = [1,2,3,4,5,6,7,8,9,10,358,359,360,361,362,363,364,365,366,367,357,
+	340,323,306,289,272,255,238,221,204,187,170,153,136,119,102,85,68,51,34,17,0,
+	368,351,334,317,300,283,266,249,232,215,198,181,164,147,130,113,96,79,62,45,28,11]
+	this.nextPieceBox = [199,200,201,202,284,285,286,287,288,271,254,237,220,203];
 };
 
 Renderer.prototype.lineClearAnimation = function () {
@@ -94,6 +94,17 @@ Renderer.prototype.matrixBorder = function () {
 			this.y = (21 - this.y) * 24;
 			this.ctx.drawImage(this.spritesheet, game.colors[9]*24, 0, 24, 24, this.x, this.y, 24, 24);
 		}
+		if (!settings.usePentominoes) {
+			for (var i = 0; i < this.nextPieceBox.length; i++) {
+				/*array index to x y tilematrix coordinates*/
+				this.x = this.nextPieceBox[i] % 17;
+				this.y = Math.floor(this.nextPieceBox[i]/17);
+				/*x y tilemap coordinates to x y pixel coordinates*/
+				this.x = this.x * 24;
+				this.y = (21 - this.y) * 24;
+				this.ctx.drawImage(this.spritesheet, game.colors[9]*24, 0, 24, 24, this.x, this.y, 24, 24);
+			}
+		}
 		game.shouldDrawBorder = false;
 	}
 };
@@ -130,7 +141,11 @@ Renderer.prototype.nextPiece = function (piece,game) {
 		this.x = 0;
 		this.y = 0;
 		this.color = game.colors[piece.id] * 24;
-		this.ctx.clearRect(288, 144, 96, 96);
+		if (settings.usePentominoes) {
+			this.ctx.clearRect(288, 120, 120, 144);
+		} else {
+			this.ctx.clearRect(288, 144, 96, 96);
+		}
 		for (var i = 0; i < piece.offsets[piece.spawnOrientation].length; i++) {
   			this.x = (piece.spawnPosition + (piece.offsets[piece.spawnOrientation][i])) % 11;
   			this.y = Math.floor((piece.spawnPosition + (piece.offsets[piece.spawnOrientation][i]))/11);
@@ -255,7 +270,7 @@ var Game = function () {
 			id: 12
 		},
 		V: {
-			offsets:[[-22,-11,-2,-1,0],[-2,-1,0,11,22],[0,1,2,11,22],[-22,-11,0,1,2]],
+			offsets:[[-10,1,10,11,12],[-12,-11,-10,1,12],[-12,-11,-10,-1,10],[-12,-1,10,11,12]],
 			spawnPosition: 226,
 			spawnOrientation: 0,
 			position: 226,
@@ -542,7 +557,10 @@ Game.prototype.changeColor = function (id,value) {
 		for (var i = 0; i < numColors; i++) {
 			randomColors.push(Math.floor(Math.random() * (54)) + 1);
 		}
-		for (var i = 1; i < this.colors.length - 1; i++) {
+		for (var i = 1; i < this.colors.length; i++) {
+			if (i === 9) {
+				i++; //dont randomize matrix border
+			}
 			this.colors[i] = randomColors[Math.floor(Math.random() * (randomColors.length))];
 		}
 		this.colors[1] = Math.floor(Math.random() * (54)) + 1;//increase the chance of garbage being a different color than the pieces
@@ -845,6 +863,8 @@ Game.prototype.marathonMode = function () {
 						this.stats.score += 300 * (this.stats.level + 1);
 					} else if (line.clear === 4) {
 						this.stats.score += 1200 * (this.stats.level + 1);
+					} else if (line.clear === 5) {
+						this.stats.score += 2000 * (this.stats.level + 1);
 					}
 					if (this.stats.level < this.gravityTable.length) {
 						this.gravity = this.gravityTable[this.stats.level] * ft.oneFrame;
@@ -1008,6 +1028,8 @@ Game.prototype.mixMode = function () {
 					} else if (line.clear === 4) {
 						this.stats.score += 1200 * (this.stats.level + 1);
 						this.pendingGarbage++;
+					} else if (line.clear === 5) {
+						this.stats.score += 2000 * (this.stats.level + 1);
 					}
 					if (this.stats.level < this.gravityTable.length) {
 						this.gravity = this.gravityTable[this.stats.level] * ft.oneFrame;
@@ -1259,7 +1281,6 @@ Settings.prototype.toggleSound = function () {
 
 Settings.prototype.togglePentominoes = function () {
     this.usePentominoes = !this.usePentominoes;
-    console.log("using pentominoes: " + this.usePentominoes);
 };
 
 var UserInterface = function () {
