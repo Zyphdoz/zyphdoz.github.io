@@ -107,7 +107,7 @@ Renderer.prototype.activePiece = function (piece) {
 		this.x = 0;
 		this.y = 0;
 		this.color = game.colors[piece.id] * 24;
-		for (var i = 0; i < 4; i++) {
+		for (var i = 0; i < piece.offsets[piece.orientation].length; i++) {
 			this.ctx.clearRect(game.lastX[i], game.lastY[i], 24, 24);
 		}
 		for (var i = 0; i < piece.offsets[piece.orientation].length; i++) {
@@ -225,15 +225,180 @@ var Game = function () {
 			hasNotBeenRendered: true,
 			id: 8
 		}
-	}	    //unused,g,J,I,Z,L,O,T,Z,border
-	this.colors = [0,5,4,4,4,4,4,4,4,1];
+	}
+	this.pentomino = {
+		I: {
+			offsets:[[-2,-1,0,1,2],[-22,-11,0,11,22],[-2,-1,0,1,2],[-22,-11,0,11,22]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 10
+		},
+		T: {
+			offsets:[[-11,0,10,11,12],[-10,-1,0,1,12],[-12,-11,-10,0,11],[-12,-1,0,1,10]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 11
+		},
+		U: {
+			offsets:[[-12,-10,-1,0,1],[-12,-11,0,10,11],[-1,0,1,10,12],[-11,-10,0,11,12]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 12
+		},
+		V: {
+			offsets:[[-22,-11,-2,-1,0],[-2,-1,0,11,22],[0,1,2,11,22],[-22,-11,0,1,2]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 13
+		},
+		W: {
+			offsets:[[-10,0,1,10,11],[-12,-11,0,1,12],[-11,-10,-1,0,10],[-12,-1,0,11,12]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 14
+		},
+		X: {
+			offsets:[[-11,-1,0,1,11],[-11,-1,0,1,11],[-11,-1,0,1,11],[-11,-1,0,1,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 15
+		},
+		R: {
+			offsets:[[-11,-1,0,1,10],[-11,-1,0,11,12],[-10,-1,0,1,11],[-12,-11,0,1,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 16
+		},
+		F: {
+			offsets:[[-11,-1,0,1,12],[-11,-10,-1,0,11],[-12,-1,0,1,11],[-11,0,1,10,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 17
+		},
+		S: {
+			offsets:[[-10,-1,0,1,10],[-12,-11,0,11,12],[-10,-1,0,1,10],[-12,-11,0,11,12]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 18
+		},
+		Z: {
+			offsets:[[-12,-1,0,1,12],[-11,-10,0,10,11],[-12,-1,0,1,12],[-11,-10,0,10,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 19
+		},
+		J: {
+			offsets:[[-10,-2,-1,0,1],[-12,-11,0,11,22],[-13,-12,-11,-10,-2],[-23,-12,-1,10,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 20
+		},
+		L: {
+			offsets:[[-13,-2,-1,0,1],[-22,-11,0,10,11],[-13,-12,-11,-10,1],[-23,-22,-12,-1,10]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 21
+		},
+		Y: {
+			offsets:[[-11,-2,-1,0,1],[-22,-12,-11,0,11],[-13,-12,-11,-10,-1],[-23,-12,-1,0,10]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 22
+		},
+		y: {
+			offsets:[[-12,-2,-1,0,1],[-22,-11,-1,0,11],[-13,-12,-11,-10,0],[-23,-12,-11,-1,10]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 23
+		},
+		H: {
+			offsets:[[-13,-12,-1,0,1],[-22,-11,-1,0,10],[-13,-12,-11,0,1],[-22,-12,-11,-1,10]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 24
+		},
+		N: {
+			offsets:[[-11,-10,-2,-1,0],[-23,-12,-11,0,11],[-12,-11,-10,-2,-1],[-23,-12,-1,0,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 25
+		},
+		P: {
+			offsets:[[-11,-10,-1,0,1],[-12,-11,-1,0,11],[-1,0,1,10,11],[-11,0,1,11,12]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 26
+		},
+		Q: {
+			offsets:[[-12,-11,-1,0,1],[-11,-1,0,10,11],[-1,0,1,11,12],[-11,-10,0,1,11]],
+			spawnPosition: 226,
+			spawnOrientation: 0,
+			position: 226,
+			orientation: 0,
+			hasNotBeenRendered: true,
+			id: 27
+		}
+	}
+	        //unused,g,J,I,Z,L,O,T,Z,border,pentominoes
+	this.colors = [0,5,4,4,4,4,4,4,4,1,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
 	this.shouldLockPiece = false;
 	this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
 	this.activePiece = this.next();
 	this.nextPiece = this.next();
 	this.nextQueueIsNotRendered = true;
-	this.lastX = [-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24];
+	this.lastX = [-24,-24,-24,-24,-24];
+	this.lastY = [-24,-24,-24,-24,-24];
 	this.lineClearAnimationStep = 0;
 	this.shouldRedrawMatrix = true;
 	this.shouldDrawBorder = true;
@@ -284,7 +449,7 @@ Game.prototype.rotateClockwise = function () {
 };
 
 Game.prototype.rotateCounterClockwise = function () {
-	if (this.canRotateClockwise()) {
+	if (this.canRotateCounterClockwise()) {
 		this.activePiece.orientation = (this.activePiece.orientation + 3) % 4;
 		this.activePiece.hasNotBeenRendered = true;
 		return true;
@@ -436,8 +601,8 @@ Game.prototype.resetActivePiece = function () {
 	this.activePiece.hasNotBeenRendered = true;
 	this.activePiece.position = this.activePiece.spawnPosition;
 	this.activePiece.orientation = this.activePiece.spawnOrientation;
-	this.lastX = [-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24];
+	this.lastX = [-24,-24,-24,-24,-24];
+	this.lastY = [-24,-24,-24,-24,-24];
 };
 
 Game.prototype.updatePieceQueue = function () {
@@ -602,13 +767,17 @@ Game.prototype.reset = function () {
 	this.shouldDrawBorder = true;
 	this.nextQueueIsNotRendered = true;
 	this.markedForRemoval.length = 0;
-	this.lastX = [-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24];
+	this.lastX = [-24,-24,-24,-24,-24];
+	this.lastY = [-24,-24,-24,-24,-24];
 	this.accumulator = 0;
 	this.shouldLockPiece = false;
 	controller.reset();
 	this.initMatrix();
-	this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
+	if (settings.usePentominoes) {
+        this.next = this.memorylessRandomizer([this.pentomino.I,this.pentomino.T,this.pentomino.U,this.pentomino.V,this.pentomino.W,this.pentomino.X,this.pentomino.R,this.pentomino.F,this.pentomino.S,this.pentomino.Z,this.pentomino.J,this.pentomino.L,this.pentomino.Y,this.pentomino.y,this.pentomino.H,this.pentomino.N,this.pentomino.P,this.pentomino.Q])
+	} else {
+		this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
+	}
 	this.activePiece = this.next();
 	this.nextPiece = this.next();
 	this.state = 2;
@@ -1075,6 +1244,7 @@ Controller.prototype.processInputsLineClearDelay = function () {
 
 var Settings = function() {
 	this.audioEnabled = true;
+	this.usePentominoes = false;
 	this.keyLeft = 37;
 	this.keyRight = 39;
 	this.keyCcw = 90;
@@ -1085,6 +1255,11 @@ var Settings = function() {
 
 Settings.prototype.toggleSound = function () {
 	this.audioEnabled = !this.audioEnabled;
+};
+
+Settings.prototype.togglePentominoes = function () {
+    this.usePentominoes = !this.usePentominoes;
+    console.log("using pentominoes: " + this.usePentominoes);
 };
 
 var UserInterface = function () {
@@ -1102,6 +1277,7 @@ var UserInterface = function () {
 	this.restartlastmodebutton = document.getElementById('restartlastmodebutton');
 	this.settingsbutton = document.getElementById('settingsbutton');
 	this.soundtogglebutton = document.getElementById('soundtogglebutton');
+    this.pentominotogglebutton = document.getElementById('pentominotogglebutton');
 	this.keyconfigbutton = document.getElementById('keyconfigbutton');
 	this.confirmkeybindingsbutton = document.getElementById('confirmkeybindingsbutton');
 	this.retrykeybindingsbutton = document.getElementById('retrykeybindingsbutton');
@@ -1132,6 +1308,7 @@ var UserInterface = function () {
 	this.restartlastmodebutton.addEventListener('click', function() { game.restartLastMode() }, false);
 	this.settingsbutton.addEventListener('click', function() { self.showSettings() }, false);
 	this.soundtogglebutton.addEventListener('click', function() { self.toggleSound() }, false);
+    this.pentominotogglebutton.addEventListener('click', function() { self.togglePentominoes() }, false);
 	this.keyconfigbutton.addEventListener('click', function() { self.showKeyConfig() }, false);
 	this.confirmkeybindingsbutton.addEventListener('click', function() { self.showSettings() }, false);
 	this.retrykeybindingsbutton.addEventListener('click', function() { self.showKeyConfig() }, false);
@@ -1231,7 +1408,7 @@ UserInterface.prototype.updateKeyConfig = function (event) {
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 5) {
 		settings.keySoftdrop = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(settings.keyCw)+"<br>↓ "+ keyName(event.keyCode)+"<br>⇊ toggle automatic soft drop | press a key";
+		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(settings.keyCw)+"<br>↓ "+ keyName(event.keyCode)+"<br>⇊ auto soft drop | press a key";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 6) {
 		settings.keyAutodrop = event.keyCode;
@@ -1247,6 +1424,15 @@ UserInterface.prototype.toggleSound = function () {
 		this.soundtogglebutton.innerHTML = 'Sound effects: Off';
 	} else {
 		this.soundtogglebutton.innerHTML = 'Sound effects: On';
+	}
+};
+
+UserInterface.prototype.togglePentominoes = function () {
+	settings.togglePentominoes();
+	if (this.pentominotogglebutton.innerHTML === 'Use Pentominoes: Off') {
+		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: On';
+	} else {
+		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: Off';
 	}
 };
 
