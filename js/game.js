@@ -170,7 +170,7 @@ var Game = function () {
 		totalLineClears: 0,
 		level: 0,
 		score: 0,
-		four: 0
+		bonus: 0
 	};
 	this.garbageHeight = 0;
 	this.state = 0; //0 = not in game. 1 = ARE, 2 = falling, 3 = Line clear delay
@@ -706,7 +706,7 @@ Game.prototype.lineClearCheck = function () {
 	sum = clear + garbageClear;
 	if (sum > 0 && sum < 4) {
 		audio.play(audio.lineClear);
-	} else if (sum === 4) {
+	} else if (sum === 4 || sum === 5) {
 		audio.play(audio.lineClear4);
 	}
 	if (sum > 0) {
@@ -773,7 +773,7 @@ Game.prototype.reset = function () {
 		totalLineClears: 0,
 		level: 0,
 		score: 0,
-		four: 0
+		bonus: 0
 	};
 	this.garbageHeight = 0;
 	this.pendingGarbage = 0;
@@ -791,6 +791,7 @@ Game.prototype.reset = function () {
 	this.shouldLockPiece = false;
 	controller.reset();
 	this.initMatrix();
+	this.resetPolyminoes();
 	if (settings.usePentominoes) {
         this.next = this.memorylessRandomizer([this.pentomino.I,this.pentomino.T,this.pentomino.U,this.pentomino.V,this.pentomino.W,this.pentomino.X,this.pentomino.R,this.pentomino.F,this.pentomino.S,this.pentomino.Z,this.pentomino.J,this.pentomino.L,this.pentomino.Y,this.pentomino.y,this.pentomino.H,this.pentomino.N,this.pentomino.P,this.pentomino.Q])
 	} else {
@@ -800,6 +801,34 @@ Game.prototype.reset = function () {
 	this.nextPiece = this.next();
 	this.state = 2;
 	this.activePiece.hasNotBeenRendered = true;
+};
+
+Game.prototype.resetPolyminoes = function () {
+	this.tetromino.J.hasNotBeenRendered = true;
+	this.tetromino.I.hasNotBeenRendered = true;
+	this.tetromino.Z.hasNotBeenRendered = true;
+	this.tetromino.L.hasNotBeenRendered = true;
+	this.tetromino.O.hasNotBeenRendered = true;
+	this.tetromino.T.hasNotBeenRendered = true;
+	this.tetromino.S.hasNotBeenRendered = true;
+	this.pentomino.I.hasNotBeenRendered = true;
+	this.pentomino.T.hasNotBeenRendered = true;
+	this.pentomino.U.hasNotBeenRendered = true;
+	this.pentomino.V.hasNotBeenRendered = true;
+	this.pentomino.W.hasNotBeenRendered = true;
+	this.pentomino.X.hasNotBeenRendered = true;
+	this.pentomino.R.hasNotBeenRendered = true;
+	this.pentomino.F.hasNotBeenRendered = true;
+	this.pentomino.S.hasNotBeenRendered = true;
+	this.pentomino.Z.hasNotBeenRendered = true;
+	this.pentomino.J.hasNotBeenRendered = true;
+	this.pentomino.L.hasNotBeenRendered = true;
+	this.pentomino.Y.hasNotBeenRendered = true;
+	this.pentomino.y.hasNotBeenRendered = true;
+	this.pentomino.H.hasNotBeenRendered = true;
+	this.pentomino.N.hasNotBeenRendered = true;
+	this.pentomino.P.hasNotBeenRendered = true;
+	this.pentomino.Q.hasNotBeenRendered = true;
 };
 
 Game.prototype.restartLastMode = function () {
@@ -841,8 +870,8 @@ Game.prototype.marathonMode = function () {
 				this.lockPiece();
 				var line = this.lineClearCheck();
 				if (line.clear > 0) {
-					if (line.clear === 4) {
-						this.stats.four++;
+					if (line.clear === 4 || line.clear === 5) {
+						this.stats.bonus++;
 					}
 					this.stats.lineClears += line.clear;
 					if (this.stats.level < 18) {
@@ -850,7 +879,7 @@ Game.prototype.marathonMode = function () {
 						It's possible to advance from level 17 to level 19 with this formula.
 						Not intentional, but intentionally not fixed.
 						*/
-						this.stats.level = Math.floor(this.stats.lineClears/10) + this.stats.four;
+						this.stats.level = Math.floor(this.stats.lineClears/10) + this.stats.bonus;
 
 					} else if (this.stats.lineClears > 179) {
 						this.stats.level = Math.floor(this.stats.lineClears/10);
@@ -1005,8 +1034,8 @@ Game.prototype.mixMode = function () {
 				var line = this.lineClearCheck();
 				if (line.clear > 0 || line.garbageClear > 0) {
 					line.clear += line.garbageClear;
-					if (line.clear === 4) {
-						this.stats.four++;
+					if (line.clear === 4 || line.clear === 5) {
+						this.stats.bonus++;
 					}
 					this.stats.lineClears += line.clear;
 					if (this.stats.level < 18) {
@@ -1014,7 +1043,7 @@ Game.prototype.mixMode = function () {
 						It's possible to advance from level 17 to level 19 with this formula.
 						Not intentional, but intentionally not fixed.
 						*/
-						this.stats.level = Math.floor(this.stats.lineClears/10) + this.stats.four;
+						this.stats.level = Math.floor(this.stats.lineClears/10) + this.stats.bonus;
 
 					} else if (this.stats.lineClears > 179) {
 						this.stats.level = Math.floor(this.stats.lineClears/10);
