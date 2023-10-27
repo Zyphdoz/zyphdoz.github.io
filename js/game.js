@@ -1409,7 +1409,7 @@ UserInterface.prototype.hideall = function () {
 
 UserInterface.prototype.showGame = function () {
 	this.hideall();
-	this.gamediv.style.display = 'inline';
+	this.gamediv.style.display = 'block';
 };
 
 UserInterface.prototype.showSettings = function () {
@@ -1582,6 +1582,7 @@ function handleResize() {
 	const canvasWidth = (canvasHeight / 1056) * 816; // Maintain aspect ratio
 	draw.canvas.style.height = canvasHeight + "px";
 	draw.canvas.style.width = canvasWidth + "px";
+	ui.gamediv.style.width = canvasWidth + "px";
 }
 handleResize();
   
