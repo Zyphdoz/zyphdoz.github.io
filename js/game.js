@@ -1576,7 +1576,16 @@ var ui = new UserInterface();
 var settings = new Settings();
 var stats = new Statistics('statisticsdiv');
 
-
+function handleResize() {
+	const windowHeight = window.innerHeight;
+	const canvasHeight = windowHeight * 0.65;
+	const canvasWidth = (canvasHeight / 1056) * 816; // Maintain aspect ratio
+	draw.canvas.style.height = canvasHeight + "px";
+	draw.canvas.style.width = canvasWidth + "px";
+}
+handleResize();
+  
+window.addEventListener("resize", handleResize);
 
 function keyName(keycode) {
 	if (keycode === 37) {
