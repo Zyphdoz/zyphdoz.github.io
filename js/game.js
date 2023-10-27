@@ -1409,7 +1409,7 @@ UserInterface.prototype.hideall = function () {
 
 UserInterface.prototype.showGame = function () {
 	this.hideall();
-	this.gamediv.style.display = 'block';
+	this.gamediv.style.display = 'flex';
 };
 
 UserInterface.prototype.showSettings = function () {
@@ -1583,6 +1583,7 @@ function handleResize() {
 	draw.canvas.style.height = canvasHeight + "px";
 	draw.canvas.style.width = canvasWidth + "px";
 	ui.gamediv.style.width = canvasWidth + "px";
+	countdown.countdowndiv.style.fontSize = 0.5 * canvasHeight + "px";
 }
 handleResize();
   
