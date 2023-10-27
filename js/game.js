@@ -1584,6 +1584,7 @@ function handleResize() {
 	draw.canvas.style.width = canvasWidth + "px";
 	ui.gamediv.style.width = canvasWidth + "px";
 	countdown.countdowndiv.style.fontSize = 0.5 * canvasHeight + "px";
+	stats.statisticsdiv.style.fontSize = 0.05 * canvasHeight + "px";
 }
 handleResize();
   
