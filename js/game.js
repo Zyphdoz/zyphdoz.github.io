@@ -27,7 +27,8 @@ var Renderer = function (game, rendererFlag) {
 	this.canvas = document.getElementById('gamecanvas');
 	this.ctx = this.canvas.getContext('2d');
 	this.spritesheet = new Image();
-	this.spritesheet.src = './res/img/tiles24.png';
+	this.spritesheet.src = './res/img/tiles96.png';
+	this.minoSize = 96; //in pixels
 	this.x = 0;
 	this.y = 0;
 	this.color = 0;
@@ -37,6 +38,7 @@ var Renderer = function (game, rendererFlag) {
 	this.nextPieceBox = [199,200,201,202,284,285,286,287,288,271,254,237,220,203];
 };
 
+
 Renderer.prototype.lineClearAnimation = function () {
 	if (game.lineClearAnimationStep != 0) {
 		this.x = 0;
@@ -45,9 +47,9 @@ Renderer.prototype.lineClearAnimation = function () {
 			for (var j = 0; j < game.lineClearAnimationStep; j++) {
 				this.x = (game.markedForRemoval[i]+j) % 11;
 				this.y = Math.floor((game.markedForRemoval[i]+j)/11);
-				this.x = this.x * 24;
-				this.y = (21-this.y) * 24;
-				this.ctx.clearRect(this.x, this.y, 24, 24)
+				this.x = this.x * this.minoSize;
+				this.y = (21-this.y) * this.minoSize;
+				this.ctx.clearRect(this.x, this.y, this.minoSize, this.minoSize)
 			}
 		}
 	}
@@ -62,18 +64,18 @@ Renderer.prototype.matrix = function () {
 		this.x = 0;
 		this.y = 0;
 		this.color = 0;
-		this.ctx.clearRect(24,24,240,480);
+		this.ctx.clearRect(this.minoSize,this.minoSize,this.minoSize*10,this.minoSize*20);
 		for (var i = 0; i < 231; i++) {
 			if (game.matrix[i] !== -1) {
 				//array index to x y tilematrix coordinates
 	  			this.x = i % 11;
 	  			this.y = Math.floor(i/11);
 	  			//x y tilemap coordinates to x y pixel coordinates
-	  			this.x = this.x * 24;
-	  			this.y = (21 - this.y) * 24;
+	  			this.x = this.x * this.minoSize;
+	  			this.y = (21 - this.y) * this.minoSize;
 				if (game.matrix[i] !== 0) {
-					this.color = game.colors[game.matrix[i]] * 24;
-					this.ctx.drawImage(this.spritesheet, this.color, 0, 24, 24, this.x, this.y, 24, 24);
+					this.color = game.colors[game.matrix[i]] * 96;
+					this.ctx.drawImage(this.spritesheet, this.color, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 				}
 			}
 		}
@@ -90,9 +92,9 @@ Renderer.prototype.matrixBorder = function () {
 			this.x = this.border[i] % 17;
 			this.y = Math.floor(this.border[i]/17);
 			/*x y tilemap coordinates to x y pixel coordinates*/
-			this.x = this.x * 24;
-			this.y = (21 - this.y) * 24;
-			this.ctx.drawImage(this.spritesheet, game.colors[9]*24, 0, 24, 24, this.x, this.y, 24, 24);
+			this.x = this.x * this.minoSize;
+			this.y = (21 - this.y) * this.minoSize;
+			this.ctx.drawImage(this.spritesheet, game.colors[9]*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 		}
 		if (!settings.usePentominoes) {
 			for (var i = 0; i < this.nextPieceBox.length; i++) {
@@ -100,9 +102,9 @@ Renderer.prototype.matrixBorder = function () {
 				this.x = this.nextPieceBox[i] % 17;
 				this.y = Math.floor(this.nextPieceBox[i]/17);
 				/*x y tilemap coordinates to x y pixel coordinates*/
-				this.x = this.x * 24;
-				this.y = (21 - this.y) * 24;
-				this.ctx.drawImage(this.spritesheet, game.colors[9]*24, 0, 24, 24, this.x, this.y, 24, 24);
+				this.x = this.x * this.minoSize;
+				this.y = (21 - this.y) * this.minoSize;
+				this.ctx.drawImage(this.spritesheet, game.colors[9]*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 			}
 		}
 		game.shouldDrawBorder = false;
@@ -117,19 +119,19 @@ Renderer.prototype.activePiece = function (piece) {
 	if (piece.hasNotBeenRendered) {
 		this.x = 0;
 		this.y = 0;
-		this.color = game.colors[piece.id] * 24;
+		this.color = game.colors[piece.id] * 96;
 		for (var i = 0; i < piece.offsets[piece.orientation].length; i++) {
-			this.ctx.clearRect(game.lastX[i], game.lastY[i], 24, 24);
+			this.ctx.clearRect(game.lastX[i], game.lastY[i], this.minoSize, this.minoSize);
 		}
 		for (var i = 0; i < piece.offsets[piece.orientation].length; i++) {
 			if (piece.position + piece.offsets[piece.orientation][i] < 231) {
 				this.x = (piece.position + (piece.offsets[piece.orientation][i])) % 11;
 	  			this.y = Math.floor((piece.position + (piece.offsets[piece.orientation][i]))/11);
-	  			this.x = this.x * 24;
+	  			this.x = this.x * this.minoSize;
 				game.lastX[i] = this.x;
-	  			this.y = (21 - this.y) * 24;
+	  			this.y = (21 - this.y) * this.minoSize;
 				game.lastY[i] = this.y;
-				this.ctx.drawImage(this.spritesheet, this.color, 0, 24, 24, this.x, this.y, 24, 24);
+				this.ctx.drawImage(this.spritesheet, this.color, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 			}
 		}
 		piece.hasNotBeenRendered = false;
@@ -140,18 +142,18 @@ Renderer.prototype.nextPiece = function (piece,game) {
 	if (game.nextQueueIsNotRendered) {
 		this.x = 0;
 		this.y = 0;
-		this.color = game.colors[piece.id] * 24;
+		this.color = game.colors[piece.id] * 96;
 		if (settings.usePentominoes) {
-			this.ctx.clearRect(288, 120, 120, 144);
+			this.ctx.clearRect(this.minoSize*12, this.minoSize*5, this.minoSize*5, this.minoSize*6);
 		} else {
-			this.ctx.clearRect(288, 144, 96, 96);
+			this.ctx.clearRect(this.minoSize*12, this.minoSize*6, this.minoSize*4, this.minoSize*4);
 		}
 		for (var i = 0; i < piece.offsets[piece.spawnOrientation].length; i++) {
   			this.x = (piece.spawnPosition + (piece.offsets[piece.spawnOrientation][i])) % 11;
   			this.y = Math.floor((piece.spawnPosition + (piece.offsets[piece.spawnOrientation][i]))/11);
-  			this.x = (this.x + 8) * 24;
-  			this.y = (27 - this.y) * 24;
-			this.ctx.drawImage(this.spritesheet, this.color, 0, 24, 24, this.x, this.y, 24, 24);
+  			this.x = (this.x + 8) * this.minoSize;
+  			this.y = (27 - this.y) * this.minoSize;
+			this.ctx.drawImage(this.spritesheet, this.color, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 		}
 		game.nextQueueIsNotRendered = false;
 	}
@@ -412,8 +414,8 @@ var Game = function () {
 	this.activePiece = this.next();
 	this.nextPiece = this.next();
 	this.nextQueueIsNotRendered = true;
-	this.lastX = [-24,-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24,-24];
+	this.lastX = [-96,-96,-96,-96,-96];
+	this.lastY = [-96,-96,-96,-96,-96];
 	this.lineClearAnimationStep = 0;
 	this.shouldRedrawMatrix = true;
 	this.shouldDrawBorder = true;
@@ -619,8 +621,8 @@ Game.prototype.resetActivePiece = function () {
 	this.activePiece.hasNotBeenRendered = true;
 	this.activePiece.position = this.activePiece.spawnPosition;
 	this.activePiece.orientation = this.activePiece.spawnOrientation;
-	this.lastX = [-24,-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24,-24];
+	this.lastX = [-96,-96,-96,-96,-96];
+	this.lastY = [-96,-96,-96,-96,-96];
 };
 
 Game.prototype.updatePieceQueue = function () {
@@ -785,8 +787,8 @@ Game.prototype.reset = function () {
 	this.shouldDrawBorder = true;
 	this.nextQueueIsNotRendered = true;
 	this.markedForRemoval.length = 0;
-	this.lastX = [-24,-24,-24,-24,-24];
-	this.lastY = [-24,-24,-24,-24,-24];
+	this.lastX = [-96,-96,-96,-96,-96];
+	this.lastY = [-96,-96,-96,-96,-96];
 	this.accumulator = 0;
 	this.shouldLockPiece = false;
 	controller.reset();
