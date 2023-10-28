@@ -1323,7 +1323,7 @@ var Settings = function() {
 	this.keySoftdrop = saved.keySoftdrop || 40;
 	this.keyAutodrop = saved.keyAutodrop || 32;
 	        //unused,g,J,I,Z,L,O,T,Z,border primary,pentominoes, border secondary (used for auto softdrop)
-	this.defaultColors = [0,5,4,4,4,4,4,4,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13]
+	this.defaultColors = [0,5,4,4,4,4,4,37,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13]
 	this.colors = saved.colors || this.defaultColors;
 }
 
