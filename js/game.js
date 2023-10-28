@@ -407,8 +407,9 @@ var Game = function () {
 			id: 27
 		}
 	}
-	        //unused,g,J,I,Z,L,O,T,Z,border,pentominoes
-	this.colors = [0,5,4,4,4,4,4,4,4,1,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
+	                //unused,g,J,I,Z,L,O,T,Z,border,pentominoes
+	this.defaultColors = [0,5,4,4,4,4,4,4,4,1,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
+	this.colors = [...this.defaultColors];
 	this.shouldLockPiece = false;
 	this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
 	this.activePiece = this.next();
@@ -577,6 +578,14 @@ Game.prototype.changeColor = function (id,value) {
 	else {
 		this.colors[id] += value;
 	}
+	this.shouldDrawBorder = true;
+	this.shouldRedrawMatrix = true;
+	this.activePiece.hasNotBeenRendered = true;
+	this.nextQueueIsNotRendered = true;
+};
+
+Game.prototype.resetColors = function () {
+	this.colors = [...this.defaultColors];
 	this.shouldDrawBorder = true;
 	this.shouldRedrawMatrix = true;
 	this.activePiece.hasNotBeenRendered = true;
@@ -1357,6 +1366,7 @@ var UserInterface = function () {
 	this.incrementfbutton = document.getElementById('f+');
 	this.addgarbagebutton = document.getElementById('addgarbagebutton');
 	this.randomizecolorsbutton = document.getElementById('randomizecolors');
+	this.resetcolorsbutton = document.getElementById('resetcolors');
 	this.restartlastmodebutton.addEventListener('click', function() { game.restartLastMode() }, false);
 	this.settingsbutton.addEventListener('click', function() { self.showSettings() }, false);
 	this.soundtogglebutton.addEventListener('click', function() { self.toggleSound() }, false);
@@ -1392,6 +1402,7 @@ var UserInterface = function () {
 		game.activePiece.hasNotBeenRendered = true;
 	}, false);
 	this.randomizecolorsbutton.addEventListener('click', function() {game.changeColor(0,0);}, false);
+	this.resetcolorsbutton.addEventListener('click', function() {game.resetColors() }, false);
 	for (var i = 0; i < this.mainmenubutton.length; i++) {
 		this.mainmenubutton[i].addEventListener('click', function() { self.showMainMenu() }, false);
 	}
