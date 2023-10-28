@@ -87,6 +87,7 @@ Renderer.prototype.matrixBorder = function () {
 		//pretend the matrix is 17 wide and 22 tall
 		this.x = 0;
 		this.y = 0;
+		const borderColor = controller.autoDrop ? game.colors[28] : game.colors[9];
 		for (var i = 0; i < this.border.length; i++) {
 			/*array index to x y tilematrix coordinates*/
 			this.x = this.border[i] % 17;
@@ -94,7 +95,7 @@ Renderer.prototype.matrixBorder = function () {
 			/*x y tilemap coordinates to x y pixel coordinates*/
 			this.x = this.x * this.minoSize;
 			this.y = (21 - this.y) * this.minoSize;
-			this.ctx.drawImage(this.spritesheet, game.colors[9]*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
+			this.ctx.drawImage(this.spritesheet, borderColor*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 		}
 		if (!settings.usePentominoes) {
 			for (var i = 0; i < this.nextPieceBox.length; i++) {
@@ -104,7 +105,7 @@ Renderer.prototype.matrixBorder = function () {
 				/*x y tilemap coordinates to x y pixel coordinates*/
 				this.x = this.x * this.minoSize;
 				this.y = (21 - this.y) * this.minoSize;
-				this.ctx.drawImage(this.spritesheet, game.colors[9]*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
+				this.ctx.drawImage(this.spritesheet, borderColor*96, 0, 96, 96, this.x, this.y, this.minoSize, this.minoSize);
 			}
 		}
 		game.shouldDrawBorder = false;
@@ -407,8 +408,8 @@ var Game = function () {
 			id: 27
 		}
 	}
-	                //unused,g,J,I,Z,L,O,T,Z,border,pentominoes
-	this.defaultColors = [0,5,4,4,4,4,4,4,4,1,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
+	                //unused,g,J,I,Z,L,O,T,Z,border primary,pentominoes, border secondary (used for auto softdrop)
+	this.defaultColors = [0,5,4,4,4,4,4,4,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13];
 	this.colors = [...this.defaultColors];
 	this.shouldLockPiece = false;
 	this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
@@ -561,7 +562,7 @@ Game.prototype.changeColor = function (id,value) {
 			randomColors.push(Math.floor(Math.random() * (54)) + 1);
 		}
 		for (var i = 1; i < this.colors.length; i++) {
-			if (i === 9) {
+			if (i === 9 || i === 28) {
 				i++; //dont randomize matrix border
 			}
 			this.colors[i] = randomColors[Math.floor(Math.random() * (randomColors.length))];
@@ -577,6 +578,7 @@ Game.prototype.changeColor = function (id,value) {
 	}
 	else {
 		this.colors[id] += value;
+		console.log("color of id:" + id + " was set to value: " + this.colors[id])
 	}
 	this.shouldDrawBorder = true;
 	this.shouldRedrawMatrix = true;
@@ -1147,6 +1149,7 @@ var Controller = function () {
 			}
 			else if (event.keyCode === settings.keyAutodrop) {
 				self.autoDrop = !self.autoDrop;
+				game.shouldDrawBorder = true;
 			}
 		} else if (ui.inKeyConfig) {
 			ui.updateKeyConfig(event);
@@ -1364,6 +1367,8 @@ var UserInterface = function () {
 	this.incrementgbutton = document.getElementById('g+');
 	this.decrementfbutton = document.getElementById('f-');
 	this.incrementfbutton = document.getElementById('f+');
+	this.decrementf2button = document.getElementById('f2-');
+	this.incrementf2button = document.getElementById('f2+');
 	this.addgarbagebutton = document.getElementById('addgarbagebutton');
 	this.randomizecolorsbutton = document.getElementById('randomizecolors');
 	this.resetcolorsbutton = document.getElementById('resetcolors');
@@ -1396,6 +1401,8 @@ var UserInterface = function () {
 	this.incrementgbutton.addEventListener('click', function() {game.changeColor(1,1) }, false);
 	this.decrementfbutton.addEventListener('click', function() {game.changeColor(9,-1) }, false);
 	this.incrementfbutton.addEventListener('click', function() {game.changeColor(9,1) }, false);
+	this.decrementf2button.addEventListener('click', function() {game.changeColor(28,-1) }, false);
+	this.incrementf2button.addEventListener('click', function() {game.changeColor(28,1) }, false);
 	this.addgarbagebutton.addEventListener('click', function() {
 		game.addGarbageLine();
 		game.shouldRedrawMatrix = true;
