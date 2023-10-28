@@ -1598,13 +1598,18 @@ var stats = new Statistics('statisticsdiv');
 function handleResize() {
 	const buttons = document.querySelectorAll('button');
 	const windowHeight = window.innerHeight;
-	const canvasHeight = windowHeight * 0.65;
-	const canvasWidth = (canvasHeight / 1056) * 816; // Maintain aspect ratio
+	let canvasHeight = windowHeight * 0.65;
+	let canvasWidth = (canvasHeight / 1056) * 816; // Maintain aspect ratio
+	if (canvasWidth < 408 || canvasHeight < 528) {
+        canvasWidth = 408;
+        canvasHeight = 528;
+    }
 	draw.canvas.style.height = canvasHeight + "px";
 	draw.canvas.style.width = canvasWidth + "px";
 	ui.gamediv.style.width = canvasWidth + "px";
 	ui.keyconfigdiv.style.fontSize = 0.05 * canvasHeight + "px";
 	ui.fashionmodecontrols.style.fontSize = 0.05 * canvasHeight + "px";
+
 	countdown.countdowndiv.style.fontSize = 0.5 * canvasHeight + "px";
 	stats.statisticsdiv.style.fontSize = 0.05 * canvasHeight + "px";
 	buttons.forEach(function(button) {
