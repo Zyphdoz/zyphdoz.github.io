@@ -1314,7 +1314,7 @@ var Settings = function() {
 		this.saveSettings()
 		saved = JSON.parse(localStorage.getItem("settings"));
 	};
-	this.audioEnabled = saved.audioEnabled || true;
+	this.audioEnabled = saved.audioEnabled === false ? false : true;
 	this.usePentominoes = saved.usePentominoes || false;
 	this.keyLeft = saved.keyLeft || 37;
 	this.keyRight = saved.keyRight || 39;
@@ -1506,20 +1506,17 @@ UserInterface.prototype.updateKeyConfig = function (event) {
 
 UserInterface.prototype.toggleSound = function () {
 	settings.toggleSound();
-	if (this.soundtogglebutton.innerHTML === 'Sound effects: On') {
-		this.soundtogglebutton.innerHTML = 'Sound effects: Off';
-	} else {
-		this.soundtogglebutton.innerHTML = 'Sound effects: On';
-	}
+	this.showCorrectText();
 };
 
 UserInterface.prototype.togglePentominoes = function () {
 	settings.togglePentominoes();
-	if (this.pentominotogglebutton.innerHTML === 'Use Pentominoes: Off') {
-		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: On';
-	} else {
-		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: Off';
-	}
+	this.showCorrectText();
+};
+
+UserInterface.prototype.showCorrectText = function () {
+	this.pentominotogglebutton.innerHTML = settings.usePentominoes ? 'Use Pentominoes: On' : 'Use Pentominoes: Off';
+	this.soundtogglebutton.innerHTML = settings.audioEnabled ? 'Sound effects: On' : 'Sound effects: Off';
 };
 
 var FrameTimer = function () {
@@ -1610,6 +1607,7 @@ var audio = new AudioPlayer();
 var ui = new UserInterface();
 var stats = new Statistics('statisticsdiv');
 
+ui.showCorrectText();
 
 function handleResize() {
 	const buttons = document.querySelectorAll('button');
