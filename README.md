@@ -1,2 +1,3 @@
-# zyphdoz.github.io
-More info at http://harddrop.com/wiki/Retromino
+# Retromino
+
+A stacker game with three unique modes of play.
