@@ -25,7 +25,7 @@
             color: #cccccc;
             height: 5vh;
             width: 38vh;
-            margin: 14px auto;
+            margin: 2vh auto;
             display: block;
         }
         button:hover {
@@ -50,7 +50,24 @@
             color: #cccccc;
             text-align: center;
             padding: 10px;
-    }
+        }
+        #fashionmodecontrols button{
+            width: fit-content;
+            display: inline;
+            margin: 0.8vh 0.4vh;
+        }
+        #fashionmodecontrols {
+            z-index: 1; 
+            font-family: 'fixedsys_excelsior_3.01Rg'; 
+            width: max-content;
+            text-align: end; 
+            color: white; 
+            position: absolute; 
+            top: 59%; 
+            left: 118%; 
+            transform: translate(-50%, -50%);
+            color: #cccccc;
+        }
         ul {
             padding: 0;
             margin: 0;
@@ -70,7 +87,7 @@
                 <li><button type="button" id="soundtogglebutton">Sound effects: On</button></li>
                 <li><button type="button" id="pentominotogglebutton">Use Pentominoes: Off</button></li>
                 <li><button type="button" id="keyconfigbutton">Configure keys</button></li>
-                <li><button type="button" id="playfashionmodebutton">Play Fashion mode ►</button></li>
+                <li><button type="button" id="playfashionmodebutton">Change Block Style</button></li>
             </ul>
         </div>
         <div id="keyconfigdiv" style="display: none">
@@ -89,16 +106,16 @@
             <div id="statisticsdiv" style="z-index: 1; font-family: 'fixedsys_excelsior_3.01Rg'; text-align: center; color: white; position: absolute; top: 73%; left: 85%; transform: translate(-50%, -50%);">
 
             </div>
-            <div id="fashionmodecontrols" style="z-index: 1; display: block; font-family: 'fixedsys_excelsior_3.01Rg'; color: white; font-size:16px; position: absolute; top: -230px; left: 288px; width: 108px;">
-                I <button type="button" id="i-"><</button><button type="button" id="i+">></button><br>
-                Z <button type="button" id="z-"><</button><button type="button" id="z+">></button><br>
-                J <button type="button" id="j-"><</button><button type="button" id="j+">></button><br>
-                L <button type="button" id="l-"><</button><button type="button" id="l+">></button><br>
-                O <button type="button" id="o-"><</button><button type="button" id="o+">></button><br>
-                T <button type="button" id="t-"><</button><button type="button" id="t+">></button><br>
-                S <button type="button" id="s-"><</button><button type="button" id="s+">></button><br>
-                G <button type="button" id="g-"><</button><button type="button" id="g+">></button><button type="button" id="addgarbagebutton">^</button><br>
-                F <button type="button" id="f-"><</button><button type="button" id="f+">></button><br>
+            <div id="fashionmodecontrols">
+                I-piece<button type="button" id="i-"><</button><button type="button" id="i+">></button><br>
+                Z-piece<button type="button" id="z-"><</button><button type="button" id="z+">></button><br>
+                J-piece<button type="button" id="j-"><</button><button type="button" id="j+">></button><br>
+                L-piece<button type="button" id="l-"><</button><button type="button" id="l+">></button><br>
+                O-piece<button type="button" id="o-"><</button><button type="button" id="o+">></button><br>
+                T-piece<button type="button" id="t-"><</button><button type="button" id="t+">></button><br>
+                S-piece<button type="button" id="s-"><</button><button type="button" id="s+">></button><br>
+                Garbage<button type="button" id="g-"><</button><button type="button" id="g+">></button><button type="button" id="addgarbagebutton">^</button><br>
+                Border<button type="button" id="f-"><</button><button type="button" id="f+">></button><br>
                 <button type="button" id="randomizecolors">randomize</button>
             </div>
             <div id="gameoverdiv" style="z-index: 1; font-family: 'fixedsys_excelsior_3.01Rg'; color: white; position: absolute; top: 57%; left: 35%; transform: translate(-50%, -50%);">
