@@ -408,9 +408,7 @@ var Game = function () {
 			id: 27
 		}
 	}
-	                //unused,g,J,I,Z,L,O,T,Z,border primary,pentominoes, border secondary (used for auto softdrop)
-	this.defaultColors = [0,5,4,4,4,4,4,4,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13];
-	this.colors = [...this.defaultColors];
+	this.colors = [...settings.colors];
 	this.shouldLockPiece = false;
 	this.next = this.memorylessRandomizer([this.tetromino.J,this.tetromino.I,this.tetromino.Z,this.tetromino.L,this.tetromino.O,this.tetromino.T,this.tetromino.S]);
 	this.activePiece = this.next();
@@ -578,20 +576,23 @@ Game.prototype.changeColor = function (id,value) {
 	}
 	else {
 		this.colors[id] += value;
-		console.log("color of id:" + id + " was set to value: " + this.colors[id])
 	}
 	this.shouldDrawBorder = true;
 	this.shouldRedrawMatrix = true;
 	this.activePiece.hasNotBeenRendered = true;
 	this.nextQueueIsNotRendered = true;
+	settings.colors = this.colors;
+	settings.saveSettings();
 };
 
 Game.prototype.resetColors = function () {
-	this.colors = [...this.defaultColors];
+	settings.colors = [...settings.defaultColors];
+	this.colors = [...settings.defaultColors];
 	this.shouldDrawBorder = true;
 	this.shouldRedrawMatrix = true;
 	this.activePiece.hasNotBeenRendered = true;
 	this.nextQueueIsNotRendered = true;
+	settings.saveSettings();
 };
 
 Game.prototype.getMatrix = function () {
@@ -1308,22 +1309,36 @@ Controller.prototype.processInputsLineClearDelay = function () {
 };
 
 var Settings = function() {
-	this.audioEnabled = true;
-	this.usePentominoes = false;
-	this.keyLeft = 37;
-	this.keyRight = 39;
-	this.keyCcw = 90;
-	this.keyCw = 88;
-	this.keySoftdrop = 40;
-	this.keyAutodrop = 32;
+	let saved = JSON.parse(localStorage.getItem("settings"));
+	if (saved === null) {
+		this.saveSettings()
+		saved = JSON.parse(localStorage.getItem("settings"));
+	};
+	this.audioEnabled = saved.audioEnabled || true;
+	this.usePentominoes = saved.usePentominoes || false;
+	this.keyLeft = saved.keyLeft || 37;
+	this.keyRight = saved.keyRight || 39;
+	this.keyCcw = saved.keyCcw || 90;
+	this.keyCw = saved.keyCw || 88;
+	this.keySoftdrop = saved.keySoftdrop || 40;
+	this.keyAutodrop = saved.keyAutodrop || 32;
+	        //unused,g,J,I,Z,L,O,T,Z,border primary,pentominoes, border secondary (used for auto softdrop)
+	this.defaultColors = [0,5,4,4,4,4,4,4,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13]
+	this.colors = saved.colors || this.defaultColors;
 }
+
+Settings.prototype.saveSettings = function () {
+	localStorage.setItem("settings", JSON.stringify(this));
+};
 
 Settings.prototype.toggleSound = function () {
 	this.audioEnabled = !this.audioEnabled;
+	this.saveSettings();
 };
 
 Settings.prototype.togglePentominoes = function () {
     this.usePentominoes = !this.usePentominoes;
+	this.saveSettings();
 };
 
 var UserInterface = function () {
@@ -1485,6 +1500,7 @@ UserInterface.prototype.updateKeyConfig = function (event) {
 		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(settings.keyCw)+"<br>↓ "+ keyName(settings.keySoftdrop)+"<br>⇊ "+ keyName(event.keyCode);
 		this.inKeyConfig = 0;
 		this.showConfirmKeyConfig();
+		settings.saveSettings();
 	}
 };
 
@@ -1586,12 +1602,12 @@ AudioPlayer.prototype.play = function (sound) {
 
 var draw = new Renderer();
 var ft = new FrameTimer();
+var settings = new Settings();
 var game = new Game();
 var controller = new Controller();
 var countdown = new Countdown(document.getElementById('countdowndiv'));
 var audio = new AudioPlayer();
 var ui = new UserInterface();
-var settings = new Settings();
 var stats = new Statistics('statisticsdiv');
 
 
