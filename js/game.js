@@ -922,7 +922,7 @@ Game.prototype.startDigMode = function () {
 	for (var i = 0; i < 5; i++) {
 		this.addGarbageLine();
 	}
-	stats.update("Score: 0 <br>Garbage: 0 <br>Lines: 0 <br>Level: 0 <br>");
+	stats.update("<br><br>Score: <br>0 <br>Garbage: <br>0 <br>Lines: <br>0 <br>Level: <br>0 <br>");
 	draw.clearCanvas();
 	draw.matrixBorder();
 	ui.showGame();
@@ -953,7 +953,7 @@ Game.prototype.digMode = function () {
 					if (this.stats.level < this.gravityTable.length) {
 						this.gravity = this.gravityTable[this.stats.level] * ft.oneFrame;
 					}
-					stats.update("Score: "+ this.stats.score +" <br>Garbage: "+ this.stats.garbageLineClears+" <br>Lines: "+ this.stats.lineClears +" <br>Level: "+ this.stats.level + " <br>");
+					stats.update("<br><br>Score: <br>"+ this.stats.score +" <br>Garbage: <br>"+ this.stats.garbageLineClears+" <br>Lines: <br>"+ this.stats.lineClears +" <br>Level: <br>"+ this.stats.level + " <br>");
 				}
 			}
 		} else if (this.state === 1) { //ARE
@@ -1414,19 +1414,19 @@ UserInterface.prototype.showGame = function () {
 
 UserInterface.prototype.showSettings = function () {
 	this.hideall();
-	this.settingsdiv.style.display = 'inline';
+	this.settingsdiv.style.display = 'block';
 };
 
 UserInterface.prototype.showMainMenu = function () {
 	this.hideall();
-	this.mainmenudiv.style.display = 'inline';
+	this.mainmenudiv.style.display = 'block';
 };
 
 UserInterface.prototype.showKeyConfig = function () {
 	this.hideall();
 	this.inKeyConfig = 1;
 	this.keyconfigdiv.innerHTML = "← move left | press a key<br>→<br>↺<br>↻<br>↓<br>⇊";
-	this.keyconfigdiv.style.display = 'inline';
+	this.keyconfigdiv.style.display = 'block';
 };
 
 UserInterface.prototype.showConfirmKeyConfig = function () {
@@ -1576,15 +1576,21 @@ var ui = new UserInterface();
 var settings = new Settings();
 var stats = new Statistics('statisticsdiv');
 
+
 function handleResize() {
+	const buttons = document.querySelectorAll('button');
 	const windowHeight = window.innerHeight;
 	const canvasHeight = windowHeight * 0.65;
 	const canvasWidth = (canvasHeight / 1056) * 816; // Maintain aspect ratio
 	draw.canvas.style.height = canvasHeight + "px";
 	draw.canvas.style.width = canvasWidth + "px";
 	ui.gamediv.style.width = canvasWidth + "px";
+	ui.keyconfigdiv.style.fontSize = 0.05 * canvasHeight + "px";
 	countdown.countdowndiv.style.fontSize = 0.5 * canvasHeight + "px";
 	stats.statisticsdiv.style.fontSize = 0.05 * canvasHeight + "px";
+	buttons.forEach(function(button) {
+		button.style.fontSize = 0.05 * canvasHeight + 'px';
+	});
 }
 handleResize();
   
