@@ -1131,9 +1131,12 @@ var Controller = function () {
 	this.disableAutoDropOnPress = false;
 	this.enableAutoDropOnPress = true;
 
+	this.keyBoardIsActive = false;
+
 	var self = this;
 
 	document.addEventListener("keydown", function(event) {
+		self.keyBoardIsActive = true;
 		if (!game.over()) {
 			if (event.keyCode === settings.keyLeft && self.left.isPressed === false) {
 				self.left.isPressed = true;
@@ -1154,6 +1157,8 @@ var Controller = function () {
 			}
 			else if (event.keyCode === settings.keyAutodrop) {
 				self.autoDrop = !self.autoDrop;
+				self.disableAutoDropOnPress = !self.disableAutoDropOnPress;
+				self.enableAutoDropOnPress = !self.enableAutoDropOnPress;
 				game.shouldDrawBorder = true;
 			}
 		} else if (ui.inKeyConfig) {
@@ -1195,7 +1200,10 @@ const dpadRight = 15;
 
 Controller.prototype.pollGamepad = function () {
 	const gp = navigator.getGamepads()[0];
-	if (gp === null) return
+	if(this.anyGamepadButtonIsPressed()) {
+		this.keyBoardIsActive = false;
+	}
+	if (gp === null || this.keyBoardIsActive) return
 	if (!game.over()) {
 		if (this.left.isPressed === false && (gp.buttons[dpadLeft].pressed || gp.buttons[L1].pressed)) {
 			this.left.isPressed = true;
@@ -1254,6 +1262,22 @@ Controller.prototype.pollGamepad = function () {
 	}
 }
 
+Controller.prototype.anyGamepadButtonIsPressed = function () {
+	const gp = navigator.getGamepads();
+	if (gp === null) return false;
+	let count = 0;
+	gp.forEach(gamepad => {
+		if (gamepad) {
+			gamepad.buttons.forEach(button => {
+				if (button.pressed) {
+					count++;
+				}
+			});
+		}
+	});
+	return count > 0 ? true : false;
+}
+
 Controller.prototype.reset = function () {
 	this.dasAccumulator = 0;
 	this.dropAccumulator = 0;
@@ -1281,6 +1305,7 @@ Controller.prototype.reset = function () {
 
 	this.disableAutoDropOnPress = false;
 	this.enableAutoDropOnPress = true;
+	this.keyBoardIsActive = false;
 };
 
 Controller.prototype.processInputs = function () {
