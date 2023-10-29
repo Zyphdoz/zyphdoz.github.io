@@ -1138,24 +1138,24 @@ var Controller = function () {
 	document.addEventListener("keydown", function(event) {
 		self.keyBoardIsActive = true;
 		if (!game.over()) {
-			if (event.keyCode === settings.keyLeft && self.left.isPressed === false) {
+			if (event.code === settings.keyLeft && self.left.isPressed === false) {
 				self.left.isPressed = true;
 				self.left.pendingMove = true;
-			} else if (event.keyCode === settings.keyRight && self.right.isPressed === false) {
+			} else if (event.code === settings.keyRight && self.right.isPressed === false) {
 				self.right.isPressed = true;
 				self.right.pendingMove = true;
-			} else if (event.keyCode === settings.keyCw && self.rotateClockwise.isPressed === false) {
+			} else if (event.code === settings.keyCw && self.rotateClockwise.isPressed === false) {
 				self.rotateClockwise.pending = true;
 				self.rotateClockwise.isPressed = true;
-			} else if (event.keyCode === settings.keyCcw && self.rotateCounterClockwise.isPressed === false) {
+			} else if (event.code === settings.keyCcw && self.rotateCounterClockwise.isPressed === false) {
 				self.rotateCounterClockwise.pending = true;
 				self.rotateCounterClockwise.isPressed = true;
 			}
-			else if (event.keyCode === settings.keySoftdrop && self.drop.isPressed === false) {
+			else if (event.code === settings.keySoftdrop && self.drop.isPressed === false) {
 				self.drop.pendingMove = true;
 				self.drop.isPressed = true;
 			}
-			else if (event.keyCode === settings.keyAutodrop) {
+			else if (event.code === settings.keyAutodrop) {
 				self.autoDrop = !self.autoDrop;
 				self.disableAutoDropOnPress = !self.disableAutoDropOnPress;
 				self.enableAutoDropOnPress = !self.enableAutoDropOnPress;
@@ -1167,20 +1167,20 @@ var Controller = function () {
 	});
 	document.addEventListener("keyup", function(event) {
 		if (!game.over()) {
-			if (event.keyCode === settings.keyLeft) {
+			if (event.code === settings.keyLeft) {
 				self.left.isPressed = false;
 				self.left.pendingMove = false;
-			} else if (event.keyCode === settings.keyRight) {
+			} else if (event.code === settings.keyRight) {
 				self.right.isPressed = false;
 				self.right.pendingMove = false;
-			} else if (event.keyCode === settings.keyCw) {
+			} else if (event.code === settings.keyCw) {
 				self.rotateClockwise.pending = false;
 				self.rotateClockwise.isPressed = false;
-			} else if (event.keyCode === settings.keyCcw) {
+			} else if (event.code === settings.keyCcw) {
 				self.rotateCounterClockwise.pending = false;
 				self.rotateCounterClockwise.isPressed = false;
 			}
-			else if (event.keyCode === settings.keySoftdrop) {
+			else if (event.code === settings.keySoftdrop) {
 				self.drop.isPressed = false;
 			}
 		}
@@ -1420,12 +1420,12 @@ var Settings = function() {
 	};
 	this.audioEnabled = saved.audioEnabled === false ? false : true;
 	this.usePentominoes = saved.usePentominoes || false;
-	this.keyLeft = saved.keyLeft || 37;
-	this.keyRight = saved.keyRight || 39;
-	this.keyCcw = saved.keyCcw || 90;
-	this.keyCw = saved.keyCw || 88;
-	this.keySoftdrop = saved.keySoftdrop || 40;
-	this.keyAutodrop = saved.keyAutodrop || 32;
+	this.keyLeft = saved.keyLeft || "ArrowLeft";
+	this.keyRight = saved.keyRight || "ArrowRight";
+	this.keyCcw = saved.keyCcw || "KeyZ";
+	this.keyCw = saved.keyCw || "KeyX";
+	this.keySoftdrop = saved.keySoftdrop || "ArrowDown";
+	this.keyAutodrop = saved.keyAutodrop || "Space";
 	        //unused,g,J,I,Z,L,O,T,Z,border primary,pentominoes, border secondary (used for auto softdrop)
 	this.defaultColors = [0,5,4,4,4,4,4,37,4,3,     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,13]
 	this.colors = saved.colors || this.defaultColors;
@@ -1580,28 +1580,28 @@ UserInterface.prototype.showFashionModeControls = function () {
 
 UserInterface.prototype.updateKeyConfig = function (event) {
 	if (this.inKeyConfig === 1) {
-		settings.keyLeft = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(event.keyCode) +"<br>→ move right | press a key<br>↺<br>↻<br>↓<br>⇊";
+		settings.keyLeft = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ event.code +"<br>→ move right | press a key<br>↺<br>↻<br>↓<br>⇊";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 2) {
-		settings.keyRight = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(event.keyCode)+"<br>↺ rotate counterclockwise | press a key<br>↻<br>↓<br>⇊";
+		settings.keyRight = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ settings.keyLeft +"<br>→ "+ event.code+"<br>↺ rotate counterclockwise | press a key<br>↻<br>↓<br>⇊";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 3) {
-		settings.keyCcw = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(event.keyCode)+"<br>↻ rotate clockwise | press a key<br>↓<br>⇊";
+		settings.keyCcw = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ settings.keyLeft +"<br>→ "+ settings.keyRight+"<br>↺ "+ event.code+"<br>↻ rotate clockwise | press a key<br>↓<br>⇊";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 4) {
-		settings.keyCw = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(event.keyCode)+"<br>↓ soft drop | press a key<br>⇊";
+		settings.keyCw = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ settings.keyLeft +"<br>→ "+ settings.keyRight+"<br>↺ "+ settings.keyCcw+"<br>↻ "+ event.code+"<br>↓ soft drop | press a key<br>⇊";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 5) {
-		settings.keySoftdrop = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(settings.keyCw)+"<br>↓ "+ keyName(event.keyCode)+"<br>⇊ auto soft drop | press a key";
+		settings.keySoftdrop = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ settings.keyLeft +"<br>→ "+ settings.keyRight+"<br>↺ "+ settings.keyCcw+"<br>↻ "+ settings.keyCw+"<br>↓ "+ event.code+"<br>⇊ auto soft drop | press a key";
 		this.inKeyConfig++;
 	} else if (this.inKeyConfig === 6) {
-		settings.keyAutodrop = event.keyCode;
-		this.keyconfigdiv.innerHTML = "← "+ keyName(settings.keyLeft) +"<br>→ "+ keyName(settings.keyRight)+"<br>↺ "+ keyName(settings.keyCcw)+"<br>↻ "+ keyName(settings.keyCw)+"<br>↓ "+ keyName(settings.keySoftdrop)+"<br>⇊ "+ keyName(event.keyCode);
+		settings.keyAutodrop = event.code;
+		this.keyconfigdiv.innerHTML = "← "+ settings.keyLeft +"<br>→ "+ settings.keyRight+"<br>↺ "+ settings.keyCcw+"<br>↻ "+ settings.keyCw+"<br>↓ "+ settings.keySoftdrop+"<br>⇊ "+ event.code;
 		this.inKeyConfig = 0;
 		this.showConfirmKeyConfig();
 		settings.saveSettings();
@@ -1737,22 +1737,5 @@ function handleResize() {
 handleResize();
   
 window.addEventListener("resize", handleResize);
-
-function keyName(keycode) {
-	if (keycode === 37) {
-		return 'left'
-	} else if (keycode === 38) {
-		return 'up'
-	} else if (keycode === 39) {
-		return 'right'
-	} else if (keycode === 40) {
-		return 'down'
-	} else if (keycode === 32) {
-		return 'space'
-	}
-	 else {
-		return String.fromCharCode(keycode)
-	}
-}
 
 }());
