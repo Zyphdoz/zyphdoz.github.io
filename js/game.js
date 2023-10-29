@@ -12,6 +12,7 @@ function main() {
 }
 
 function updateState() {
+	controller.pollGamepad();
 	game.update();
 }
 
@@ -1127,6 +1128,9 @@ var Controller = function () {
 	}
 	this.autoDrop = false;
 
+	this.disableAutoDropOnPress = false;
+	this.enableAutoDropOnPress = true;
+
 	var self = this;
 
 	document.addEventListener("keydown", function(event) {
@@ -1178,6 +1182,78 @@ var Controller = function () {
 	});
 };
 
+
+const xButton = 0;
+const oButton = 1;
+const L1 = 4;
+const R1 = 5;
+const dpadUp = 12;
+const dpadDown = 13;
+const dpadLeft = 14;
+const dpadRight = 15;
+
+
+Controller.prototype.pollGamepad = function () {
+	const gp = navigator.getGamepads()[0];
+	if (gp === null) return
+	if (!game.over()) {
+		if (this.left.isPressed === false && (gp.buttons[dpadLeft].pressed || gp.buttons[L1].pressed)) {
+			this.left.isPressed = true;
+			this.left.pendingMove = true;
+		} 
+		if (this.right.isPressed === false && (gp.buttons[dpadRight].pressed || gp.buttons[R1].pressed)) {
+			this.right.isPressed = true;
+			this.right.pendingMove = true;
+		} 
+		if (this.rotateClockwise.isPressed === false && gp.buttons[oButton].pressed) {
+			this.rotateClockwise.pending = true;
+			this.rotateClockwise.isPressed = true;
+		} 
+		if (this.rotateCounterClockwise.isPressed === false && gp.buttons[xButton].pressed) {
+			this.rotateCounterClockwise.pending = true;
+			this.rotateCounterClockwise.isPressed = true;
+		}
+		if (this.drop.isPressed === false && gp.buttons[dpadDown].pressed) {
+			this.drop.pendingMove = true;
+			this.drop.isPressed = true;
+		}
+		if (this.left.isPressed === true && !(gp.buttons[dpadLeft].pressed || gp.buttons[L1].pressed)) {
+			this.left.isPressed = false;
+			this.left.pendingMove = false;
+		} 
+		if (this.right.isPressed === true && !(gp.buttons[dpadRight].pressed || gp.buttons[R1].pressed)) {
+			this.right.isPressed = false;
+			this.right.pendingMove = false;
+		} 
+		if (this.rotateClockwise.isPressed === true && !gp.buttons[oButton].pressed) {
+			this.rotateClockwise.pending = false;
+			this.rotateClockwise.isPressed = false;
+		} 
+		if (this.rotateCounterClockwise.isPressed === true && !gp.buttons[xButton].pressed) {
+			this.rotateCounterClockwise.pending = false;
+			this.rotateCounterClockwise.isPressed = false;
+		}
+		if (this.drop.isPressed === true && !gp.buttons[dpadDown].pressed) {
+			this.drop.pendingMove = false;
+			this.drop.isPressed = false;
+		}
+		//auto drop toggle was a lot simpler with event based inputs
+		if (!this.autoDrop && this.enableAutoDropOnPress && gp.buttons[dpadUp].pressed) {
+			this.autoDrop = true;
+			this.enableAutoDropOnPress = false;
+			game.shouldDrawBorder = true;
+		} else if (this.autoDrop && !gp.buttons[dpadUp].pressed) {
+			this.disableAutoDropOnPress = true;
+		} else if (this.disableAutoDropOnPress && gp.buttons[dpadUp].pressed) {
+			this.autoDrop = false;
+			this.disableAutoDropOnPress = false;
+			game.shouldDrawBorder = true;
+		} else if (!this.disableAutoDropOnPress && !gp.buttons[dpadUp].pressed) {
+			this.enableAutoDropOnPress = true;
+		}
+	}
+}
+
 Controller.prototype.reset = function () {
 	this.dasAccumulator = 0;
 	this.dropAccumulator = 0;
@@ -1202,6 +1278,9 @@ Controller.prototype.reset = function () {
 		isPressed: false,
 	}
 	this.autoDrop = false;
+
+	this.disableAutoDropOnPress = false;
+	this.enableAutoDropOnPress = true;
 };
 
 Controller.prototype.processInputs = function () {
